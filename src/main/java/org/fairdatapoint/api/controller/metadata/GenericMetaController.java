@@ -111,7 +111,11 @@ public class GenericMetaController {
         while (true) {
             final MetaPathDTO entry = new MetaPathDTO();
             entry.setResourceDefinitionUuid(definition.getUuid().toString());
-            entry.setTitle(getTitle(entity).stringValue());
+            if (getTitle(entity) != null) {
+                entry.setTitle(getTitle(entity).stringValue());
+            } else {
+                entry.setTitle(urlPrefix);
+            }
             final IRI parentUri = i(getStringObjectBy(entity, entityUri, DCTERMS.IS_PART_OF));
             Optional.ofNullable(parentUri).map(IRI::toString).ifPresent(entry::setParent);
             pathMap.put(entityUri.toString(), entry);

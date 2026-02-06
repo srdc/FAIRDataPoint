@@ -69,13 +69,13 @@ public class KnownUUIDs {
             UUID.fromString("6f7a5a76-6185-4bd0-9fe9-62ecc90c9bad");
 
     public static final UUID SCHEMA_CATALOG_UUID =
-            UUID.fromString("2aa7ba63-d27a-4c0e-bfa6-3a4e250f4660");
+            UUID.fromString("998eac9d-8349-4aaa-a959-3a7341c558a2");
 
     public static final UUID SCHEMA_DATASET_UUID =
-            UUID.fromString("866d7fb8-5982-4215-9c7c-18d0ed1bd5f3");
+            UUID.fromString("4ecfe85e-d30a-4bcf-b125-1c6fee52683b");
 
     public static final UUID SCHEMA_DISTRIBUTION_UUID =
-            UUID.fromString("ebacbf83-cd4f-4113-8738-d73c0735b0ab");
+            UUID.fromString("58086042-16be-4e9a-93a4-4230f7b70d12");
 
     public static final UUID SCHEMA_V1_RESOURCE_UUID =
             UUID.fromString("71d77460-f919-4f72-b265-ed26567fe361");

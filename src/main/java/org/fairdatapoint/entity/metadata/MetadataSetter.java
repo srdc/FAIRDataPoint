@@ -193,6 +193,12 @@ public class MetadataSetter {
             update(metadata, uri, agentType, agent.getUri());
             update(metadata, agent.getUri(), RDF.TYPE, agent.getType());
             update(metadata, agent.getUri(), FOAF.NAME, agent.getName());
+            if (agent.getContactPoint() != null) {
+                update(metadata, agent.getContactPoint().getUri(), RDF.TYPE, agent.getContactPoint().getType());
+                update(metadata, agent.getContactPoint().getUri(), VCARD4.HAS_URL, agent.getContactPoint().getHasUrl());
+                update(metadata, agent.getContactPoint().getUri(), VCARD4.HAS_EMAIL, agent.getContactPoint().getHasEmail());
+                update(metadata, agent.getUri(), DCAT.CONTACT_POINT, agent.getContactPoint().getUri());
+            }
         }
     }
 

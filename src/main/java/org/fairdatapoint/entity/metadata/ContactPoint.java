@@ -33,22 +33,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.vocabulary.FOAF;
+import org.eclipse.rdf4j.model.vocabulary.VCARD4;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Agent {
+public class ContactPoint {
 
     private IRI uri;
 
-    private IRI mbox;
+    private IRI type = VCARD4.KIND;
 
-    private IRI type = FOAF.AGENT;
+    private Literal hasUrl;
 
-    private Literal name;
-
-    private ContactPoint contactPoint;
+    private Literal hasEmail;
 
 }

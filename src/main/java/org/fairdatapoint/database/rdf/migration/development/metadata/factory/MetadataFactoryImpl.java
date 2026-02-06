@@ -22,7 +22,9 @@
  */
 package org.fairdatapoint.database.rdf.migration.development.metadata.factory;
 
+import org.eclipse.rdf4j.model.vocabulary.VCARD4;
 import org.fairdatapoint.entity.metadata.Agent;
+import org.fairdatapoint.entity.metadata.ContactPoint;
 import org.fairdatapoint.util.ValueFactoryHelper;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
@@ -95,7 +97,13 @@ public class MetadataFactoryImpl implements MetadataFactory {
                 i("http://example.com/publisher"),
                 i("http://example.com/publisher/mbox"),
                 i(FOAF.AGENT),
-                l("Publisher")));
+                l("Publisher"),
+                new ContactPoint(
+                        i("http://example.com/publisherContactPoint"),
+                        i(VCARD4.KIND),
+                        null,
+                        l("publisher@example.com"))
+                ));
 
         if (parent != null) {
             setParent(metadata, uri, parent);

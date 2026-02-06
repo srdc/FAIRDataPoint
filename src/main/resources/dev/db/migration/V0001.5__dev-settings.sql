@@ -61,9 +61,13 @@ VALUES ('9d661dca-8017-4dba-b930-cd2834ea59e8', '57a98728-ce8c-4e7f-b0f8-94e2668
 INSERT INTO settings_search_filter (uuid, settings_id, type, label, predicate, query_records, order_priority, created_at, updated_at)
 VALUES ('26913eb3-67dd-45c9-b8ff-4c97e8162a9b', '00000000-0000-0000-0000-000000000000', 'IRI', 'License', 'http://purl.org/dc/terms/license', True, 2, now(), now());
 
--- Search Filters: License
+-- Search Filters: Version
 INSERT INTO settings_search_filter (uuid, settings_id, type, label, predicate, query_records, order_priority, created_at, updated_at)
 VALUES ('cb25afb4-6169-42f8-bde5-181c803773a8', '00000000-0000-0000-0000-000000000000', 'IRI', 'Version', 'http://www.w3.org/ns/dcat#version', True, 3, now(), now());
+
+-- Search Filters: Health Category
+INSERT INTO settings_search_filter (uuid, settings_id, type, label, predicate, query_records, order_priority, created_at, updated_at)
+VALUES ('22614367-1ac4-45c1-89a9-2d653bcfc184', '00000000-0000-0000-0000-000000000000', 'IRI', 'Health Category', 'http://healthdataportal.eu/ns/health#healthCategory', True, 4, now(), now());
 
 -- Metrics
 INSERT INTO settings_metric (uuid, settings_id, metric_uri, resource_uri, order_priority, created_at, updated_at)
