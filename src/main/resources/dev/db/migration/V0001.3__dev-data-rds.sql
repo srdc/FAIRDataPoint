@@ -38,13 +38,6 @@ VALUES ('660a1821-a5d2-48d0-a26b-0c6d5bac3de4', '02c649de-c579-43bb-b470-306abdc
 -- INSERT INTO resource_definition_link (uuid, resource_definition_id, title, property_uri, order_priority, created_at, updated_at)
 -- VALUES ('c2eaebb8-4d8d-469d-8736-269adeded996', '02c649de-c579-43bb-b470-306abdc808c7', 'Download', 'http://www.w3.org/ns/dcat#downloadURL', 2, now(), now());
 
-INSERT INTO resource_definition_child (uuid, source_resource_definition_id, target_resource_definition_id, relation_uri, title, tags_uri, order_priority, created_at, updated_at)
-VALUES ('4caffdb9-0d9a-4b57-a23e-615489a68878', '02c649de-c579-43bb-b470-306abdc808c7', '571835be-faa6-47a9-aa7f-7b079a1fee3a', 'http://www.w3.org/ns/dcat#downloadURL', 'Data Dictionary', NULL, 1, now(), now());
-
-INSERT INTO resource_definition_child_metadata (uuid, resource_definition_child_id, title, property_uri, order_priority, created_at, updated_at)
-VALUES ('56a3634d-4b60-42b9-b3d0-e286e45f945b', '4caffdb9-0d9a-4b57-a23e-615489a68878', 'Table', 'http://www.w3.org/ns/csvw#table', 1, now(), now());
-
-
 INSERT INTO metadata_schema_usage (uuid, resource_definition_id, metadata_schema_id, order_priority)
 VALUES ('bbf4ecb3-c529-4c02-955c-7160755debf5', '02c649de-c579-43bb-b470-306abdc808c7', '58086042-16be-4e9a-93a4-4230f7b70d12', 1);
 
@@ -57,6 +50,13 @@ VALUES ('9f138a13-9d45-4371-b763-0a3b9e0ec912', '2f08228e-1789-40f8-84cd-28e3288
 
 INSERT INTO resource_definition_child_metadata (uuid, resource_definition_child_id, title, property_uri, order_priority, created_at, updated_at)
 VALUES ('723e95d3-1696-45e2-9429-f6e98e3fb893', '9f138a13-9d45-4371-b763-0a3b9e0ec912', 'Media Type', 'http://www.w3.org/ns/dcat#mediaType', 1, now(), now());
+
+-- HealthDCAT-AP R7
+INSERT INTO resource_definition_child (uuid, source_resource_definition_id, target_resource_definition_id, relation_uri, title, tags_uri, order_priority, created_at, updated_at)
+VALUES ('3d1b6f4c-9a27-4f0e-8c31-6b5a0e7d21af', '2f08228e-1789-40f8-84cd-28e3288c3604', '571835be-faa6-47a9-aa7f-7b079a1fee3a', 'http://healthdataportal.eu/ns/health#hasVariables', 'Data Dictionary', NULL, 2, now(), now());
+
+INSERT INTO resource_definition_child_metadata (uuid, resource_definition_child_id, title, property_uri, order_priority, created_at, updated_at)
+VALUES ('56a3634d-4b60-42b9-b3d0-e286e45f945b', '3d1b6f4c-9a27-4f0e-8c31-6b5a0e7d21af', 'Table', 'http://www.w3.org/ns/csvw#table', 1, now(), now());
 
 INSERT INTO metadata_schema_usage (uuid, resource_definition_id, metadata_schema_id, order_priority)
 VALUES ('b8a0ed37-42a1-487e-8842-09fe082c4cc6', '2f08228e-1789-40f8-84cd-28e3288c3604', '4ecfe85e-d30a-4bcf-b125-1c6fee52683b', 1);

@@ -996,6 +996,7 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix dash:     <http://datashapes.org/dash#> .
 @prefix healthdcatap: <http://healthdataportal.eu/ns/health#> .
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
 
 :DatasetShape a shacl:NodeShape;
   shacl:closed false;
@@ -1413,6 +1414,30 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       dash:editor dash:URIEditor;
       dash:viewer dash:LabelViewer;
       shacl:path healthdcatap:healthTheme
+    ], [
+      shacl:group :DatasetMandatorySection;
+  shacl:order 1;
+  rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/";
+      shacl:datatype xsd:boolean;
+      shacl:description "Indicates whether the Dataset contains structured data for which a machine-readable description of the data variables can be provided."@en;
+      shacl:name "structured data"@en;
+      shacl:minCount 1;
+      shacl:maxCount 1;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:BooleanSelectEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:hasStructuredData
+    ], [
+      # shacl:class csvw:TableGroup;
+      shacl:group :DatasetMandatorySection;
+  shacl:order 1;
+  rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/";
+      shacl:description "Links the Dataset to a CSVW TableGroup describing its variables. Becomes mandatory when structured data is true."@en;
+      shacl:name "variables"@en;
+      shacl:nodeKind shacl:IRI;
+      dash:editor dash:URIEditor;
+      dash:viewer dash:LabelViewer;
+      shacl:path healthdcatap:hasVariables
     ];
   shacl:targetClass dcat:Dataset .
 
