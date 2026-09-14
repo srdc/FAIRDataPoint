@@ -7,6 +7,49 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### HealthDCAT-AP Release 7
+
+Aligns the custom SHACL in `src/main/resources/dev/db/migration/V0001.2__dev-data-schemas.sql` with HealthDCAT-AP R7, targeting the **PUBLIC** access level. Line numbers below refer to that file.
+
+R7 publishes no HealthDCAT-specific SHACL  [`shacl/dcat-ap-SHACL.ttl`](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/shacl/dcat-ap-SHACL.ttl) is unmodified DCAT-AP 3.0.1 
+Cardinalities thus come from [`context/healthdcat-cardinality-rules.json`](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/context/healthdcat-cardinality-rules.json) (Dataset, keyed `PUBLIC` / `NON-PUBLIC` / `RESTRICTED`) and from the [R7 class tables](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/) for every other class. Issue numbers are from [changelog 5](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/changelog.html).
+
+#### Added
+
+| Lines | Change | Reference |
+|---|---|---|
+| 177–222 | `:CPOVContactPointShape` — `cv:email` as `shacl:nodeKind shacl:Literal`, plus `cv:contactPage`, `cv:telephone`, `cv:openingHours`, `cv:specialOpeningHoursSpecification`. Nothing validated the CPOV contact before. | [§7.15](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#contact-point), issue #25 |
+| 224–261 | `:CustodianShape` — `foaf:name` 1..\*, `dct:type` 0..1, `cv:contactPoint` card. 1. No vCard. | [§7.1.3](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#custodian) |
+| 74–88 | `cv:contactPoint` on `:AgentShape` (optional) so `dct:creator` agents can carry CPOV contacts | issue #19 |
+| 1655–1750 | Eight Dataset properties the adapter already emitted but the form could not render: `minTypicalAge` (1664), `maxTypicalAge` (1676), `numberOfRecords` (1688), `numberOfUniqueIndividuals` (1700), `populationCoverage` (1710), `retentionPeriod` (1723), `adms:sample` (1737), `dct:alternative` (1747) | cardinality-rules.json |
+| 2342–2346 | `dct:title` 1..n on `:CSVWTableShape` | [§7.14.2](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#table) |
+| ~60–66 | `dash:viewer dash:LabelViewer` on `:AgentShape` → `dct:type`; without a viewer the client drops the property from detail pages | client `SHACLViewParser.ts:54-58` |
+
+#### Changed
+
+| Lines | Change | Reference |
+|---|---|---|
+| 1280, 1345, 1358, 1426 | `dct:type`, `dcat:keyword`, `dct:provenance`, `dcat:contactPoint` lose `minCount 1` and move to the Optional section — all 0..\* at PUBLIC, mandatory only at NON-PUBLIC. **Switching to `NON_PUBLIC` means restoring all four.** | cardinality-rules.json |
+| 1636–1639 | `geodcatap:custodian` validated by `:CustodianShape`, not `:HDABShape` (which required a vCard contact R7 asks of no agent). `maxCount 1` kept — custodian is 0..1. | [§7.1.3](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#custodian) |
+| 287–295, 446–454 | `cv:contactPoint` gains `minCount 1` + `shacl:node :CPOVContactPointShape` on `:HDABShape` and `:PublisherShape` | [§7.1.1](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#hdabs), [§7.1.2](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#publisher-0) |
+| 274, 438 | vCard `dcat:contactPoint` on HDAB and Publisher relaxed to optional, relabelled "(vCard, deprecated)". Dataset's own contact stays vCard. | issue #10, [§7.10](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#kind) |
+| 423 | `dct:description` on `:PublisherShape` loses `maxCount 1` — 0..\*, repeatable per language. R7 home of the "publisher note". | [§7.1.2](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#publisher-0) |
+| 618–625 | Catalogue `dct:publisher` gains `minCount 1` and uses `:PublisherShape` | [§7.2](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#catalogue) (1..1), issue #27 |
+
+#### Fixed
+
+| Lines | Change | Reference |
+|---|---|---|
+| 1483 | `dct:identifier` no longer forced to `shacl:datatype xsd:anyURI` — R7 range is plain Literal, the example emits an untyped string | [`#dctidentifier`](https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#dctidentifier) |
+| 1606, 1617, 1628 | `dpv:hasPurpose`, `dpv:hasLegalBasis`, `dqv:hasQualityAnnotation` lose `maxCount 1` — all 0..\* | cardinality-rules.json |
+
+#### Removed
+
+- `healthdcatap:trustedDataHolder` from `:PublisherShape`. The term does not exist in R7 (nor do
+  `publisherNote` / `publisherType`). R7 carries the roles on `geodcatap:custodian`,
+  `dct:description` and `dct:type` + NAL Health Publisher Types. The adapter still emits it -
+  tracked in `stage-fhir-fdp-adapter/CHANGELOG.md`.
+
 ### Changed
 
 - Update to Java 21 by @MarekSuchanek in #471
