@@ -48,6 +48,7 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix dash:     <http://datashapes.org/dash#> .
 @prefix time: <http://www.w3.org/2006/time#> .
+@prefix cv: <http://data.europa.eu/m8g/> .
 @prefix healthdcatap: <http://healthdataportal.eu/ns/health#> .
 
 :AgentShape a shacl:NodeShape;
@@ -60,6 +61,7 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
     shacl:name "type"@en;
     shacl:nodeKind shacl:BlankNodeOrIRI;
     dash:editor dash:URIEditor ;
+    dash:viewer dash:LabelViewer ;
     shacl:path dc:type
   ], [
     rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Agent.name";
@@ -70,6 +72,18 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
     shacl:nodeKind shacl:Literal;
     dash:editor dash:TextFieldEditor;
     dash:viewer dash:LiteralViewer
+  ], [
+    # Agent Contact Details aligned with Contact Point
+    rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/changelog.html";
+    shacl:path cv:contactPoint ;
+    shacl:name "Contact point (CPOV)"@en ;
+    shacl:description "Contact details for the agent, using the CPOV contact point model."@en ;
+    shacl:class cv:ContactPoint ;
+    shacl:node :CPOVContactPointShape ;
+    shacl:maxCount 1 ;
+    shacl:nodeKind shacl:BlankNodeOrIRI ;
+    dash:editor dash:BlankNodeEditor ;
+    dash:viewer dash:DetailsViewer
   ];
   shacl:targetClass foaf:Agent .
 
@@ -159,6 +173,89 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
         dash:viewer dash:LiteralViewer ;
     ] .
 
+# Contact Point CPOV
+:CPOVContactPointShape a shacl:NodeShape ;
+  rdfs:seeAlso "https://semiceu.github.io/CPOV/releases/2.1.1/#ContactPoint" ;
+  shacl:closed false ;
+  shacl:targetClass cv:ContactPoint ;
+  shacl:property [
+      shacl:path cv:email ;
+      shacl:name "Email"@en ;
+      shacl:description "E-mail address of the contact point. R7 issue #25: a plain literal, not a mailto: IRI."@en ;
+      shacl:nodeKind shacl:Literal ;
+      dash:editor dash:TextFieldEditor ;
+      dash:viewer dash:LiteralViewer ;
+      shacl:order 1
+    ], [
+      shacl:path cv:contactPage ;
+      shacl:name "Contact page"@en ;
+      shacl:description "A web page giving access to the contact point."@en ;
+      shacl:nodeKind shacl:IRI ;
+      dash:editor dash:URIEditor ;
+      dash:viewer dash:LabelViewer ;
+      shacl:order 2
+    ], [
+      shacl:path cv:telephone ;
+      shacl:name "Telephone"@en ;
+      shacl:description "Telephone number of the contact point."@en ;
+      shacl:nodeKind shacl:Literal ;
+      dash:editor dash:TextFieldEditor ;
+      dash:viewer dash:LiteralViewer ;
+      shacl:order 3
+    ], [
+      shacl:path cv:openingHours ;
+      shacl:name "Opening hours"@en ;
+      shacl:description "The hours during which the contact point is available."@en ;
+      shacl:nodeKind shacl:BlankNodeOrIRI ;
+      dash:editor dash:BlankNodeEditor ;
+      dash:viewer dash:DetailsViewer ;
+      shacl:order 4
+    ], [
+      shacl:path cv:specialOpeningHoursSpecification ;
+      shacl:name "Availability restriction"@en ;
+      shacl:description "Exceptions to the regular opening hours."@en ;
+      shacl:nodeKind shacl:BlankNodeOrIRI ;
+      dash:editor dash:BlankNodeEditor ;
+      dash:viewer dash:DetailsViewer ;
+      shacl:order 5
+    ] .
+
+# Custodian
+:CustodianShape a shacl:NodeShape ;
+  rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#custodian" ;
+  shacl:closed false ;
+  shacl:property [
+      shacl:path foaf:name ;
+      shacl:name "Name"@en ;
+      shacl:description "A name of the custodian."@en ;
+      shacl:minCount 1 ;
+      shacl:nodeKind shacl:Literal ;
+      dash:editor dash:TextFieldEditor ;
+      dash:viewer dash:LiteralViewer ;
+      shacl:order 1
+    ], [
+      shacl:path dc:type ;
+      shacl:name "Type"@en ;
+      shacl:description "The nature of the custodian. The NAL Health Publisher Types (EHDS) must be used."@en ;
+      shacl:maxCount 1 ;
+      shacl:nodeKind shacl:BlankNodeOrIRI ;
+      dash:editor dash:URIEditor ;
+      dash:viewer dash:LabelViewer ;
+      shacl:order 2
+    ], [
+      shacl:path cv:contactPoint ;
+      shacl:name "Contact point (CPOV)"@en ;
+      shacl:description "Contact details for technical support from the data holder."@en ;
+      shacl:class cv:ContactPoint ;
+      shacl:node :CPOVContactPointShape ;
+      shacl:minCount 1 ;
+      shacl:maxCount 1 ;
+      shacl:nodeKind shacl:BlankNodeOrIRI ;
+      dash:editor dash:BlankNodeEditor ;
+      dash:viewer dash:DetailsViewer ;
+      shacl:order 3
+    ] .
+
 :HDAB
   a rdfs:Class ;
   rdfs:subClassOf foaf:Agent .
@@ -175,9 +272,8 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
         dash:viewer dash:LiteralViewer ;
     ], [
         shacl:path dcat:contactPoint ;
-        shacl:name "Contact point" ;
+        shacl:name "Contact point (vCard, deprecated)" ;
         shacl:node :ContactPointShape ;
-        shacl:minCount 1 ;
         shacl:maxCount 1 ;
         dash:editor dash:BlankNodeEditor ;
     ], [
@@ -187,6 +283,16 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
         shacl:maxCount 1 ;
         dash:editor dash:URIEditor ;
         dash:viewer dash:LabelViewer ;
+    ], [
+        shacl:path cv:contactPoint ;
+        shacl:name "Contact point (CPOV)" ;
+        shacl:class cv:ContactPoint ;
+        shacl:node :CPOVContactPointShape ;
+        shacl:minCount 1 ;
+        shacl:maxCount 1 ;
+        shacl:nodeKind shacl:BlankNodeOrIRI ;
+        dash:editor dash:BlankNodeEditor ;
+        dash:viewer dash:DetailsViewer ;
     ] .
 
 :IdentifierShape a shacl:NodeShape;
@@ -311,20 +417,16 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
     dash:editor dash:TextFieldEditor ;
     dash:viewer dash:LiteralViewer ;
   ], [
+    # R7 section 7.1.2 Publisher: description (Literal) 0..*, "A description of the publisher
+    # activities", repeatable for language versions. This is the R7 home of the publisher note;
+    # healthdcatap:publisherNote does not exist in R7.
     shacl:path dc:description ;
     shacl:name "Publisher Note"@en ;
     shacl:nodeKind shacl:Literal ;
-    shacl:maxCount 1 ;
     dash:editor dash:TextAreaEditor ;
     dash:viewer dash:LiteralViewer ;
   ], [
-    shacl:path healthdcatap:trustedDataHolder ;
-    shacl:name "Trusted data holder"@en ;
-    shacl:datatype xsd:boolean ;
-    shacl:maxCount 1 ;
-    dash:editor dash:BooleanSelectEditor ;
-    dash:viewer dash:LiteralViewer ;
-  ], [
+    # healthdcatap:publisherType does not exist anymore
     shacl:path dc:type ;
     shacl:name "Publisher type"@en ;
     shacl:maxCount 1 ;
@@ -332,11 +434,22 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
     dash:editor dash:URIEditor ;
     dash:viewer dash:LabelViewer ;
   ], [
+    # R7 asks for no vCard contact on agents
     shacl:path dcat:contactPoint ;
-    shacl:name "Contact point"@en ;
-    shacl:minCount 1 ;
+    shacl:name "Contact point (vCard, deprecated)"@en ;
     shacl:maxCount 1 ;
     shacl:node :ContactPointShape ;
+    dash:editor dash:BlankNodeEditor ;
+    dash:viewer dash:DetailsViewer ;
+  ], [
+    # Contact point (cv:ContactPoint) cardinality 1
+    shacl:path cv:contactPoint ;
+    shacl:name "Contact point (CPOV)"@en ;
+    shacl:class cv:ContactPoint ;
+    shacl:node :CPOVContactPointShape ;
+    shacl:minCount 1 ;
+    shacl:maxCount 1 ;
+    shacl:nodeKind shacl:BlankNodeOrIRI ;
     dash:editor dash:BlankNodeEditor ;
     dash:viewer dash:DetailsViewer ;
   ].
@@ -498,15 +611,16 @@ VALUES ('7201ccdb-8eb7-4003-a563-476e9eccebce',
       shacl:group :CatalogPublicationSection;
       shacl:path dc:issued
     ], [
+      # cv:contactPoint cardinality 1 on a publisher
       rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Catalogue.publisher";
       shacl:description "An entity (organisation) responsible for making the Catalogue available."@en;
-      shacl:class foaf:Agent;
-      shacl:node :AgentShape;
+      shacl:node :PublisherShape;
+      shacl:minCount 1;
       shacl:maxCount 1;
       dash:editor dash:BlankNodeEditor ;
       dash:viewer dash:DetailsViewer ;
       shacl:name "publisher"@en;
-      shacl:group :CatalogPublicationSection;
+      shacl:group :CatalogMandatorySection;
       shacl:order 1 ;
       shacl:path dc:publisher
     ], [
@@ -997,6 +1111,10 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
 @prefix dash:     <http://datashapes.org/dash#> .
 @prefix healthdcatap: <http://healthdataportal.eu/ns/health#> .
 @prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix dqv: <http://www.w3.org/ns/dqv#> .
+@prefix geodcatap: <http://data.europa.eu/930/> .
+@prefix cv: <http://data.europa.eu/m8g/> .
 
 :DatasetShape a shacl:NodeShape;
   shacl:closed false;
@@ -1150,12 +1268,12 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       dash:viewer dash:LabelViewer ;
       shacl:path dcat:landingPage
     ], [
-      shacl:group :DatasetMandatorySection;
+      shacl:group :DatasetOptionalSection;
   shacl:order 1;
+  # R7 PUBLIC access level: type is 0..*
   rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Dataset.type";
       shacl:description "A type of the Dataset."@en;
       shacl:name "type"@en;
-      shacl:minCount 1;
       shacl:nodeKind shacl:BlankNodeOrIRI;
       dash:editor dash:URIEditor ;
       dash:viewer dash:LabelViewer ;
@@ -1215,26 +1333,28 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       dash:viewer dash:LiteralViewer;
       shacl:path dc:issued
     ], [
-      shacl:group :DatasetMandatorySection;
+      shacl:group :DatasetOptionalSection;
   shacl:order 1;
+  # R7 PUBLIC access level: keyword is 0..*
   rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Dataset.keyword";
       shacl:description "A keyword or tag describing the Dataset."@en;
       shacl:name "keyword"@en;
-      shacl:minCount 1;
       shacl:nodeKind shacl:Literal;
       dash:editor dash:TextFieldEditor;
       dash:viewer dash:LiteralViewer;
       shacl:path dcat:keyword
     ], [
-      shacl:group :DatasetMandatorySection;
+      shacl:group :DatasetOptionalSection;
   shacl:order 1;
+  # R7 PUBLIC access level: provenance is 0..*
   rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Dataset.provenance";
       shacl:description "A statement about the lineage of a Dataset."@en;
       shacl:name "provenance"@en;
-      shacl:minCount 1;
-      shacl:nodeKind shacl:Literal;
-      dash:editor dash:TextFieldEditor;
-      dash:viewer dash:LiteralViewer;
+      # HealthDCAT-AP R7 takes a dct:ProvenanceStatement carrying the text as rdfs:label, rather than a bare literal.
+      shacl:class dc:ProvenanceStatement;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
       shacl:path dc:provenance
     ], [
       shacl:group :DatasetOptionalSection;
@@ -1293,13 +1413,13 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       dash:viewer dash:LiteralViewer;
       shacl:path dc:description
     ], [
-      shacl:group :DatasetMandatorySection;
+      shacl:group :DatasetOptionalSection;
   shacl:order 1;
+  # R7 PUBLIC access level: contact point is 0..*
   rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Dataset.contactpoint";
       shacl:class vcard:Kind;
       shacl:description "Contact information that can be used for sending comments about the Dataset."@en;
       shacl:name "contact point"@en;
-      shacl:minCount 1;
       shacl:node :ContactPointShape;
       dash:editor dash:BlankNodeEditor ;
       dash:viewer dash:DetailsViewer ;
@@ -1356,7 +1476,7 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       shacl:description "The main identifier for the Dataset, e.g. the URI or other unique identifier in the context of the Catalogue."@en;
       shacl:name "identifier"@en;
       shacl:minCount 1;
-      shacl:datatype xsd:anyURI;
+      # xsd:anyURI was over-restrictive and is deliberately not constrained
       shacl:nodeKind shacl:Literal;
       dash:editor dash:LiteralEditor;
       dash:viewer dash:LiteralViewer;
@@ -1428,16 +1548,203 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       dash:viewer dash:LiteralViewer;
       shacl:path healthdcatap:hasStructuredData
     ], [
-      # shacl:class csvw:TableGroup;
-      shacl:group :DatasetMandatorySection;
+      # R7: variables is 0..*
+      # rdf:type triple lives in its own named graph
+      # sh:ClassConstraintComponent. shacl:nodeKind shacl:IRI is the strongest constraint that holds
+      shacl:group :DatasetOptionalSection;
   shacl:order 1;
-  rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/";
+  rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#healthdcataphasVariables";
       shacl:description "Links the Dataset to a CSVW TableGroup describing its variables. Becomes mandatory when structured data is true."@en;
       shacl:name "variables"@en;
       shacl:nodeKind shacl:IRI;
       dash:editor dash:URIEditor;
       dash:viewer dash:LabelViewer;
       shacl:path healthdcatap:hasVariables
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/";
+      # R6 moved this from skos:Concept to free text; R7 issue #26 dropped the language tag.
+      shacl:description "A code value used in the dataset, as free text."@en;
+      shacl:name "code values"@en;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:TextFieldEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:hasCodeValues
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      rdfs:seeAlso "https://hdeu-dcat.acceptance.data.health.europa.eu/resource/authority/coding-system";
+      # Membership of the EU coding-system list is deliberately NOT enforced
+      shacl:class dc:Standard;
+      shacl:description "A coding system used in the dataset."@en;
+      shacl:name "coding system"@en;
+      shacl:nodeKind shacl:IRI;
+      dash:editor dash:URIEditor;
+      dash:viewer dash:LabelViewer;
+      shacl:path healthdcatap:hasCodingSystem
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      shacl:class dpv:PersonalData;
+      shacl:description "A category of personal data contained in the dataset (DPV-PD)."@en;
+      shacl:name "personal data"@en;
+      shacl:nodeKind shacl:IRI;
+      dash:editor dash:URIEditor;
+      dash:viewer dash:LabelViewer;
+      shacl:path dpv:hasPersonalData
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: purpose is 0..*
+      shacl:class dpv:Purpose;
+      shacl:description "The purpose for which the data are processed."@en;
+      shacl:name "purpose"@en;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path dpv:hasPurpose
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: legal basis is 0..*
+      shacl:class dpv:LegalBasis;
+      shacl:description "The legal ground on which the data are processed."@en;
+      shacl:name "legal basis"@en;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path dpv:hasLegalBasis
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: quality annotation is 0..*
+      shacl:class dqv:QualityCertificate;
+      shacl:description "A quality annotation attached to the dataset."@en;
+      shacl:name "quality annotation"@en;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path dqv:hasQualityAnnotation
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # The party holding the data, distinct from the publisher
+      shacl:description "The custodian of the dataset."@en;
+      shacl:name "custodian"@en;
+      shacl:maxCount 1;
+      shacl:node :CustodianShape;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path geodcatap:custodian
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7 gives the analytics output its own property instead of dct:relation
+      shacl:class dcat:Distribution;
+      shacl:description "A distribution holding analytical output derived from the dataset."@en;
+      shacl:name "analytics"@en;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path healthdcatap:analytics
+    ], [
+      # The eight property shapes below were previously absent
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      rdfs:seeAlso "https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/#healthdcatapminTypicalAge";
+      # R7: 0..1 / Recommended
+      shacl:datatype xsd:nonNegativeInteger;
+      shacl:description "The minimum typical age of the population within the dataset."@en;
+      shacl:name "minimum typical age"@en;
+      shacl:maxCount 1;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:LiteralEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:minTypicalAge
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: 0..1 / Recommended
+      shacl:datatype xsd:nonNegativeInteger;
+      shacl:description "The maximum typical age of the population within the dataset."@en;
+      shacl:name "maximum typical age"@en;
+      shacl:maxCount 1;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:LiteralEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:maxTypicalAge
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: 0..1 / Recommended
+      shacl:datatype xsd:nonNegativeInteger;
+      shacl:description "The number of records within the dataset."@en;
+      shacl:name "number of records"@en;
+      shacl:maxCount 1;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:LiteralEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:numberOfRecords
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: 0..1 / Recommended
+      shacl:datatype xsd:nonNegativeInteger;
+      shacl:description "The number of unique individuals within the dataset."@en;
+      shacl:name "number of unique individuals"@en;
+      shacl:maxCount 1;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:LiteralEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:numberOfUniqueIndividuals
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: 0..* / Recommended
+      shacl:description "The populations covered by the dataset."@en;
+      shacl:name "population coverage"@en;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:TextAreaEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path healthdcatap:populationCoverage
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: 0..1 / Recommended, range Period of Time
+      shacl:class dc:PeriodOfTime;
+      shacl:description "The minimum and maximum retention time of the dataset."@en;
+      shacl:name "retention period"@en;
+      shacl:maxCount 1;
+      shacl:node :PeriodOfTimeShape;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path healthdcatap:retentionPeriod
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      rdfs:seeAlso "https://semiceu.github.io/DCAT-AP/releases/3.0.1#Dataset.sample";
+      # R7: 0..* / Recommended, range Distribution
+      shacl:class dcat:Distribution;
+      shacl:description "A sample distribution of the dataset."@en;
+      shacl:name "sample"@en;
+      shacl:nodeKind shacl:BlankNodeOrIRI;
+      # Editors match healthdcatap:analytics above: the adapter emits both as inline blank nodes
+      # typed dcat:Distribution, so shacl:class is safe here (the type is in the same graph).
+      dash:editor dash:BlankNodeEditor;
+      dash:viewer dash:DetailsViewer;
+      shacl:path <http://www.w3.org/ns/adms#sample>
+    ], [
+      shacl:group :DatasetOptionalSection;
+      shacl:order 1;
+      # R7: 0..* / Optional.
+      shacl:description "An alternative name for the Dataset."@en;
+      shacl:name "alternative"@en;
+      shacl:nodeKind shacl:Literal;
+      dash:editor dash:TextFieldEditor;
+      dash:viewer dash:LiteralViewer;
+      shacl:path dc:alternative
     ];
   shacl:targetClass dcat:Dataset .
 
@@ -2025,6 +2332,17 @@ VALUES ('b6f4f592-9338-4387-a53f-9a6e3f546620',
     dash:viewer dash:LabelViewer ;
     shacl:maxCount 1 ;
     shacl:path csvw:url
+  ] ,
+  [
+    # HealthDCAT-AP R7 Table: title (Literal) 1..n.
+    shacl:group :DefaultGroup ;
+    shacl:description "A name given to the table."@en ;
+    shacl:name "title"@en ;
+    shacl:nodeKind shacl:Literal ;
+    shacl:minCount 1 ;
+    dash:editor dash:TextFieldEditor ;
+    dash:viewer dash:LiteralViewer ;
+    shacl:path dc:title
   ] ,
   [
     shacl:group :DefaultGroup ;
