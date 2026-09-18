@@ -271,12 +271,6 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
         dash:editor dash:TextFieldEditor ;
         dash:viewer dash:LiteralViewer ;
     ], [
-        shacl:path dcat:contactPoint ;
-        shacl:name "Contact point (vCard, deprecated)" ;
-        shacl:node :ContactPointShape ;
-        shacl:maxCount 1 ;
-        dash:editor dash:BlankNodeEditor ;
-    ], [
         shacl:path dc:type ;
         shacl:name "Type" ;
         shacl:nodeKind shacl:BlankNodeOrIRI ;
@@ -433,14 +427,6 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
     shacl:nodeKind shacl:IRI ;
     dash:editor dash:URIEditor ;
     dash:viewer dash:LabelViewer ;
-  ], [
-    # R7 asks for no vCard contact on agents
-    shacl:path dcat:contactPoint ;
-    shacl:name "Contact point (vCard, deprecated)"@en ;
-    shacl:maxCount 1 ;
-    shacl:node :ContactPointShape ;
-    dash:editor dash:BlankNodeEditor ;
-    dash:viewer dash:DetailsViewer ;
   ], [
     # Contact point (cv:ContactPoint) cardinality 1
     shacl:path cv:contactPoint ;
