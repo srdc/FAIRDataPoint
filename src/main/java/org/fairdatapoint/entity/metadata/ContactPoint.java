@@ -32,7 +32,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.vocabulary.VCARD4;
 
 @NoArgsConstructor
@@ -45,8 +44,8 @@ public class ContactPoint {
 
     private IRI type = VCARD4.KIND;
 
-    private Literal hasUrl;
+    private IRI hasUrl;
 
-    private Literal hasEmail;
+    private IRI hasEmail;
 
 }

@@ -102,7 +102,7 @@ public class MetadataFactoryImpl implements MetadataFactory {
                         i("http://example.com/publisherContactPoint"),
                         i(VCARD4.KIND),
                         null,
-                        l("publisher@example.com"))
+                        i("mailto:publisher@example.com"))
                 ));
 
         if (parent != null) {
