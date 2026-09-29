@@ -163,23 +163,15 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
         shacl:name "Page" ;
         shacl:path vcard:hasURL ;
         shacl:maxCount 1 ;
-        shacl:nodeKind shacl:IRI ;
         dash:editor dash:URIEditor ;
         dash:viewer dash:LabelViewer ;
     ], [
         shacl:name "Email" ;
-        shacl:description "An e-mail address as a mailto: IRI, e.g. mailto:contact@example.org"@en ;
         shacl:path vcard:hasEmail ;
         shacl:maxCount 1 ;
-        shacl:nodeKind shacl:IRI ;
-        dash:editor dash:URIEditor ;
-        dash:viewer dash:LabelViewer ;
-    ] ;
-    shacl:or (
-        [ shacl:path vcard:hasURL ; shacl:minCount 1 ]
-        [ shacl:path vcard:hasEmail ; shacl:minCount 1 ]
-    ) ;
-    shacl:message "A contact point (vcard:Kind) needs at least one of vcard:hasURL or vcard:hasEmail (HealthDCAT-AP R7)."@en .
+        dash:editor dash:LiteralEditor ;
+        dash:viewer dash:LiteralViewer ;
+    ] .
 
 # Contact Point CPOV
 :CPOVContactPointShape a shacl:NodeShape ;
@@ -226,12 +218,7 @@ VALUES ('ad9f1c05-ab5c-459d-aefa-c0a4f4be2d6f',
       dash:editor dash:BlankNodeEditor ;
       dash:viewer dash:DetailsViewer ;
       shacl:order 5
-    ] ;
-  shacl:or (
-    [ shacl:path cv:email ; shacl:minCount 1 ]
-    [ shacl:path cv:contactPage ; shacl:minCount 1 ]
-  ) ;
-  shacl:message "A contact point (cv:ContactPoint) needs at least one of cv:email or cv:contactPage (HealthDCAT-AP R7)."@en .
+    ] .
 
 # Custodian
 :CustodianShape a shacl:NodeShape ;
@@ -1745,15 +1732,6 @@ VALUES ('5f10b562-441e-4057-bc2e-ec1cc299ae46',
       dash:viewer dash:LiteralViewer;
       shacl:path dc:alternative
     ];
-  shacl:or (
-    [ shacl:not [ shacl:path dc:accessRights ;
-                  shacl:hasValue <http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC> ] ]
-    [ shacl:property [ shacl:path dcat:contactPoint ; shacl:minCount 1 ] ,
-                     [ shacl:path dcat:keyword ; shacl:minCount 1 ] ,
-                     [ shacl:path dc:type ; shacl:minCount 1 ] ,
-                     [ shacl:path dc:provenance ; shacl:minCount 1 ] ]
-  ) ;
-  shacl:message "A NON_PUBLIC dataset needs at least one dcat:contactPoint, dcat:keyword, dct:type and dct:provenance (HealthDCAT-AP R7)."@en ;
   shacl:targetClass dcat:Dataset .
 
 :DatasetMandatorySection
