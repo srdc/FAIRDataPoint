@@ -24,6 +24,7 @@ package org.fairdatapoint.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.fairdatapoint.api.controller.CsvwContentController;
 import org.fairdatapoint.api.converter.ErrorConverter;
 import org.fairdatapoint.api.converter.RdfConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +101,7 @@ public class WebConfig implements WebMvcConfigurer {
                         HttpHeaders.AUTHORIZATION,
                         HttpHeaders.ACCEPT,
                         HttpHeaders.CONTENT_TYPE)
-                .exposedHeaders(HttpHeaders.LOCATION, HttpHeaders.LINK);
+                .exposedHeaders(HttpHeaders.LOCATION, HttpHeaders.LINK, CsvwContentController.TOTAL_COUNT_HEADER);
     }
 
 }
